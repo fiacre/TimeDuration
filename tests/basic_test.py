@@ -109,40 +109,40 @@ class basic_test(unittest.TestCase):
         self.assertEqual(min - 10835 < 0.01, True)
 
 
-    def testToHours (self) :
+    def testToHours(self) :
         ts = "12hours, 13 min, 12.2 sec"
         ts1 = td(ts, True)
         self.assertEqual(ts1.to_hours() - 12.2214 < 0.01, True) 
 
-    def testLessThan (self) :
+    def testLessThan(self) :
         string2 = "34:21:12.2"
         string3 = "21:15:22.5"
         s2 = td(string2)
         s3 = td(string3)
         self.assertEqual(s2 < s3, False)
     
-    def testLessThanEqual (self) :
+    def testLessThanEqual(self) :
         string4 = "1 D 34:21:12.2"
         string5 = "3 weeks, 4 days 21:15:22"
         s4 = td(string4, True)
         s5 = td(string5, True)
         self.assertEqual(s4 <= s5, True)
 
-    def testEqual (self) :
+    def testEqual(self) :
         string6 = "5 days, 14:21:12.2"
         string7 = "4 days, 38:21:12.2"
         s6 = td(string6, True)
         s7 = td(string7, True)
         self.assertEqual(s6 == s7, True)
    
-    def testEqual (self) :
+    def testEqual_2(self) :
         string6 = "5 days, 14:21:12.2"
         string7 = "4 days, 38:21:12.2"
         s6 = td(string6, True)
         s7 = td(string7, True)
         self.assertEqual(s6 == s7, True)
 
-    def testNotEqual (self) :
+    def testNotEqual(self) :
         string9 = "3 weeks, 7 days, 12 hours"
         string10 = "3 weeks, 7 days, 12 hours and 45 minutes"
         s9 = td(string9, True)
@@ -150,21 +150,21 @@ class basic_test(unittest.TestCase):
         self.assertEqual( s9 != s10, True)
 
 
-    def testGreaterThan (self) :
+    def testGreaterThan(self) :
         string11 = "1d 22:34:00"
         string12 = '1d 22:34:00.01'
         s11 = td(string11, True)
         s12 = td(string12, True)
         self.assertEqual(s12 > s11, True)
 
-    def testAddition (self) :
+    def testAddition(self) :
         s13 = td("5:10:10.0", True)
         s14 = td("4:01:01.0", True)
         temp = td("0:00:00", True)
         temp = s13 + s14
         self.assertEqual(str(temp), "09:11:11.00")
 
-    def testCmp (self) :
+    def testCmp(self) :
         time_durations = []
         t1 = td("11:12:13.0")
         t2 = td("13:14:15.0")
