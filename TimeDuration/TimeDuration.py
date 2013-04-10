@@ -1,14 +1,14 @@
 import sys
 import re
-"""  There doesn't seem to be a module for dealing with time
+
+class TimeDuration (object) :
+    """  
+    There doesn't seem to be a module for dealing with time
     as disambiguate from clock time.
     Use Case :
         time diff betwen 1d:12h:15m:7.72s and 2d:5h:12m:15.0s 
         for calulations involving timed events
-"""
-
-class TimeDuration (object) :
-
+    """
     TIME_UNITS = { "W" : ( "W", "wk", "week", "weeks" ), 
             "D" : ( "D", "d", "dd", "day", "days"),
             "H" : ( "H", "h", "hh", "hr", "hour", "hours"),
@@ -21,7 +21,9 @@ class TimeDuration (object) :
         if verbose == 1 :
             self.DEBUG = True
         self.time_string = time_string
-        self.wdhms_re = re.compile (r'week|wk|weeks|day|d|days|hr|hour|hours|hrs|min|sec|dd|hh|mm|ss|m|s', re.IGNORECASE)
+        self.wdhms_re = re.compile(
+            r'week|wk|weeks|day|d|days|hr|hour|hours|hrs|min|sec|dd|hh|mm|ss|m|s', 
+            re.IGNORECASE)
         self.hms_re = re.compile (r'\d*[:\-,\s+]?\d*[:\-,\s+]?\d*\.?\d?')
         self.weeks = 0
         self.days = 0
@@ -32,11 +34,11 @@ class TimeDuration (object) :
         if time_string :
             if self.wdhms_re.search(self.time_string) :
                 if self.DEBUG :
-                    print >>sys.stderr, "DEBUG :__INIT__ : we have a funny string! Going Fuzzy! " + self.time_string
+                    sys.stderr.write("DEBUG :__INIT__ : we have a funny string! Going Fuzzy!\n" + self.time_string)
                 self._fuzzy_match()
             elif self.hms_re.search(self.time_string) :
                 if self.DEBUG :
-                    print >>sys.stderr, "DEBUG : __INIT__ : looks like a normalized string? " + self.time_string
+                    sys.stderr.write("DEBUG : __INIT__ : looks like a normalized string?\n" + self.time_string)
                 self._string2time()
             else :
                 print >>sys.stderr, "Unrecognized time string"
@@ -45,18 +47,18 @@ class TimeDuration (object) :
 
     def to_seconds (self) :
         if self.DEBUG :
-            print >>sys.stderr, 'DEBUG (to_seconds) : %d days %02d:%02d:%02.02f' % (self.days, self.hours, self.minutes, self.seconds)
+            sys.stderr.write('DEBUG (to_seconds):%d days %02d:%02d:%02.02f\n' % (self.days, self.hours, self.minutes, self.seconds))
         var = 0.0
-        if  self.weeks == 0 :
-            var =  float(self.seconds) + 60*int(self.minutes) + 3600*int(self.hours) + 86400*int(self.days)
+        if self.weeks == 0 :
+            var=float(self.seconds) + 60*int(self.minutes) + 3600*int(self.hours) + 86400*int(self.days)
         else :
-            var =  float(self.seconds) + 60*int(self.minutes) + 3600*int(self.hours) + 86400*int(self.days) + 604800*int(self.weeks)
+            var=float(self.seconds) + 60*int(self.minutes) + 3600*int(self.hours) + 86400*int(self.days) + 604800*int(self.weeks)
         return float(var)
          
 
     def from_seconds (self) :
         if self.DEBUG :
-            print >>sys.stderr, 'DEBUG (from_seconds) : %02d:%02d:%02.02f' % (self.hours, self.minutes, self.seconds)
+            sys.stderr.write('DEBUG (from_seconds) : %02d:%02d:%02.02f\n' % (self.hours, self.minutes, self.seconds))
              
         return '%02d:%02d:%02.02f' % (self.hours, self.minutes, self.seconds)
 
@@ -69,7 +71,8 @@ class TimeDuration (object) :
             + float(self.seconds)/60 
         return float(val)
 
-        # "%d W %d D %02d:%02d:%02.02f" % (self.weeks, self.days, self.hours, self.minutes, self.seconds)
+        # "%d W %d D %02d:%02d:%02.02f" % 
+        #   (self.weeks, self.days, self.hours, self.minutes, self.seconds)
 
     def to_hours (self) :
         var =  168*int(self.weeks)  \
@@ -187,7 +190,7 @@ class TimeDuration (object) :
             return '%02d D %02d:%02d:%02.02f' % (int(self.days), int(self.hours), int(self.minutes), float(self.seconds))
         else :
             total_days = (self.weeks)*7
-            return '%02d D %02d:%02d:%02.02f' % (int (self.total_days), int(self.hours), int(self.minutes), float(self.seconds))
+            return '%02d D %02d:%02d:%02.02f' % (int (self.days), int(self.hours), int(self.minutes), float(self.seconds))
 
     def _fuzzy_match (self) :
         output = []
@@ -195,9 +198,12 @@ class TimeDuration (object) :
             print >>sys.stderr, "DEBUG (fuzzy_match)  %s " % (self.time_string)
 
         """
-        This will match 2 days, 12:34 -- which might be the output of unix uptime command, note -- no seconds
+        This will match 2 days, 12:34 -- 
+        which might be the output of unix uptime command, note -- no seconds
         """
-        colon_sep_match = re.compile(r'(\d+)\s*d(?:ays)?[:\-,\s+]+(\d+)[:\-,\s+]+(\d+)[:\-,\s+]*(\d*\.*\d*)', re.IGNORECASE)
+        colon_sep_match = re.compile(
+                r'(\d+)\s*d(?:ays)?[:\-,\s+]+(\d+)[:\-,\s+]+(\d+)[:\-,\s+]*(\d*\.*\d*)', 
+                    re.IGNORECASE)
         #colon_sep_re = re.compile(r'[:\-]')
         m = colon_sep_match.match(self.time_string)
         if m  :
@@ -237,24 +243,11 @@ class TimeDuration (object) :
             elif s[-1] == "S" :
                 self.seconds = float(s[0])
 
-        if self.DEBUG : print >>sys.stderr, "DEBUG (fuzzy_match) : %d %d %d %d %f " % (self.weeks, self.days, self.hours, self.minutes, self.seconds)
+        if self.DEBUG : 
+            sys.stderr.write("DEBUG (fuzzy_match) : %d %d %d %d %f\n" % (
+             self.weeks, self.days, self.hours, self.minutes, self.seconds))
         self._normalize_times()
 
-
-        """ if (self.minutes > 60 or self.seconds > 60.0) :
-            min, sec = divmod(self.seconds, 60)
-            hrs, mins = divmod(self.minutes, 60)
-            self.seconds = sec
-            self.minutes = min + mins
-            if self.minutes > 60 :
-                h, self.minutes = divmod(self.minutes, 60)
-                self.hours +=h
-            else :
-                self.hours += hrs
-                seconds = sec
-        """
-        # return "%d W %d D %02d:%02d:%02.02f" % (self.weeks, self.days, self.hours, self.minutes, self.seconds)
-       
 
     def _string2time (self) :
         prog = re.compile('([\d+\.]+)')
@@ -277,14 +270,18 @@ class TimeDuration (object) :
             else :
                 raise AttributeError
         except AttributeError, e :
-            print >>sys.stderr, "TimeParse Error : " + self.time_string + " does not look like a valid time string?? "
+            sys.stderr.write("TimeParse Error : " + 
+                self.time_string + 
+                " does not look like a valid time string??\n ")
         except Exception, e :
             print >>sys.stderr, "TimeParse Error : " + str(e) 
             
         self._normalize_times()
 
     def _normalize_times (self) :
-        if self.DEBUG : print >>sys.stderr, 'DEBUG (normalize_times) %d minutes %f seconds' % (self.minutes, self.seconds)
+        if self.DEBUG : 
+            sys.stderr.write('DEBUG (normalize_times) %d minutes %f seconds\n' % (
+                self.minutes, self.seconds))
         d = min = sec = hrs = h = mins = 0.0
         if float(self.seconds) >= float(60.0) :
             min, sec = divmod(self.seconds, 60)
@@ -292,8 +289,11 @@ class TimeDuration (object) :
             self.seconds = sec
             self.minutes += min
             if self.DEBUG :
-                print >>sys.stderr, 'DEBUG (normalize_times) : %02d:%02d:%02.02f' % (self.hours, self.minutes, self.seconds)
-                print >>sys.stderr, 'DEBUG (normalize_times)  : %02d' % (hrs)
+                sys.stderr.write(
+                    'DEBUG (normalize_times) : %02d:%02d:%02.02f\n' % (
+                        self.hours, self.minutes, self.seconds))
+                sys.stderr.write(
+                    'DEBUG (normalize_times) : %02d\n' % (hrs))
             if self.minutes >= 60 :
                 h, self.minutes = divmod(self.minutes, 60)
                 self.hours +=h
@@ -301,23 +301,27 @@ class TimeDuration (object) :
                 self.hours += hrs
                 self.seconds = sec
                 if self.DEBUG :
-                    print >>sys.stderr, 'DEBUG (normalize_times)  : %02d:%02d:%02.02f' % (self.hours, self.minutes, self.seconds)
+                    sys.stderr.write(
+                        'DEBUG (normalize_times) : %02d:%02d:%02.02f\n' % (
+                            self.hours, self.minutes, self.seconds))
         
         elif int(self.minutes) >= int(60) :
             if self.DEBUG :
-                print >>sys.stderr, 'DEBUG (normalize_times)  : %02d:%02d:%02.02f' % (self.hours, self.minutes, self.seconds)
+                sys.stderr.write( 
+                    'DEBUG (normalize_times)  : %02d:%02d:%02.02f\n' % (
+                        self.hours, self.minutes, self.seconds))
             hrs, mins = divmod(self.minutes, 60)
             self.minutes = mins
             self.hours += hrs
 
         elif ( self.days != 0 and self.hours >= 24 ) :
             if self.DEBUG :
-                print >>sys.stderr, 'DEBUG (normalize_times)  : %d days %02d:%02d:%02.02f' % (self.days, self.hours, self.minutes, self.seconds)
+                sys.stderr.write( 
+                    'DEBUG (normalize_times)  : %d days %02d:%02d:%02.02f\n' % (
+                        self.days, self.hours, self.minutes, self.seconds))
             d, hrs =  divmod(self.hours, 24)
             self.days += d
             self.hours = hrs
             
        
-
-
 

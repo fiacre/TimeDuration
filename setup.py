@@ -31,6 +31,6 @@ durations of time to a normalized format.
 """,
       packages = ['TimeDuration'],
       install_requires=['setuptools'],
-      test_suite="tests", 
+      test_suite="tests.basic_test", 
       )
 
