@@ -4,6 +4,7 @@ import sys
 import glob
 from distutils import sysconfig
 from TimeDuration.TimeDuration import TimeDuration as td
+from datetime import datetime, timedelta
 
 class basic_test(unittest.TestCase):
     def testInstance (self) :
@@ -187,6 +188,16 @@ class basic_test(unittest.TestCase):
         td_1 = td("1:14.5")
         self.assertEqual( ( td_1.to_seconds() - 74.5 )  < 0.001, True)
 
+    def testToTD(self):
+        ts = TimeDuration("120 hours, 85 seconds")
+        td_obj = ts.to_timedelta('seconds')
+        self.assertIsInstance(td_obj, timedelta)
+
+    def testToTD2(self):
+        ts = TimeDuration("20 hours, 85 seconds")
+        td_obj = ts.to_timedelta('minutes')
+        self.assertIsInstance(td_obj, timedelta)
+        self.assertTrue(datetime.now() + td_obj > datetime.now())
     
 if __name__ == "__main__" :
 	unittest.main()
