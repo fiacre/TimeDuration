@@ -1,10 +1,13 @@
 import sys
 import re
+from datetime import timedelta
 
 class TimeDuration (object) :
     """  
-    There doesn't seem to be a module for dealing with time
-    as disambiguate from clock time.
+    Time Duration
+    Accept string that looks like 'it ought to be time'
+    turn into object that can be used on its own
+    or as a datetime.timedelta object
     Use Case :
         time diff betwen 1d:12h:15m:7.72s and 2d:5h:12m:15.0s 
         for calulations involving timed events
@@ -44,6 +47,20 @@ class TimeDuration (object) :
                 print >>sys.stderr, "Unrecognized time string"
                 raise AttributeError
 
+
+    def to_timedelta(self, resolution=''):
+        if resolution == 'seconds' or resolution =='':
+            td = timedelta(seconds=int(round(self.to_seconds())))
+            return td
+        elif resolution == 'minutes':
+            mins = 60*int(round(self.to_seconds()))
+            td = timedelta(minutes=mins)
+            return td
+        elif resolution == 'hours':
+            hours = 60*60*int(round(self._to_seconds()))
+            td = timedelta(hours=hours)
+            return td
+        
 
     def to_seconds (self) :
         if self.DEBUG :

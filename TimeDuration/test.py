@@ -1,11 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 import unittest
 import os
 import sys
 import glob
 from distutils import sysconfig
-
-PYTHONLIB = os.path.join(sysconfig.get_python_lib(standard_lib=1, prefix=''), os.getcwd())
+from datetime import timedelta, datetime
 
 from TimeDuration import TimeDuration
 
@@ -192,6 +191,16 @@ class TestTimeDuration (unittest.TestCase) :
         td_1 = TimeDuration("1:14.5")
         self.assertEqual( ( td_1.to_seconds() - 74.5 )  < 0.001, True)
 
+    def testToTD(self):
+        ts = TimeDuration("120 hours, 85 seconds")
+        td_obj = ts.to_timedelta('seconds')
+        self.assertIsInstance(td_obj, timedelta)
+
+    def testToTD2(self):
+        ts = TimeDuration("20 hours, 85 seconds")
+        td_obj = ts.to_timedelta('minutes')
+        self.assertIsInstance(td_obj, timedelta)
+        self.assertTrue(datetime.now() + td_obj > datetime.now())
     
 if __name__ == "__main__" :
 
