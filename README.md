@@ -19,5 +19,8 @@ There are examples of usage in the example.py file
 
 Author Andrew Lee, fiacre.patrick@gmail.com
 
+2012-03-16: update
+    now can call to_timedelta and get back a datetime.timedelta object
+
 
 
