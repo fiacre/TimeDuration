@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env  python
 from distutils.sysconfig import get_python_lib
 from distutils.core import setup
 from setuptools import setup, find_packages
@@ -13,7 +13,7 @@ import os
 PYTHONLIB = join(get_python_lib(standard_lib=1, prefix=''), 'site-packages')
 
 setup(name="TimeDuration",
-      version = "0.2a",
+      version = "0.2b",
       description = "TimeDuration is a module that deals with stopwatch time rather than wallclock time",
       author = "Andrew Lee",
       author_email = "fiacre.patrick@gmail.com",
@@ -28,6 +28,8 @@ do simple calculations on such string such as find the average of a tuple of Tim
 I'd also like to be able to say something like "3 weeks, 5 days 12 hours and 32 minutes" and be
 able to convert that to minutes, seconds or hours and be able to convert strings that look like
 durations of time to a normalized format.
+
+2014-03-16: added support for datetime.timedelta 
 """,
       packages = ['TimeDuration'],
       install_requires=['setuptools'],

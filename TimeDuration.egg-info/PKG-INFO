@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: TimeDuration
-Version: 0.2a
+Version: 0.2b
 Summary: TimeDuration is a module that deals with stopwatch time rather than wallclock time
 Home-page: http://statz.com/libs-TimeDuration
 Author: Andrew Lee
@@ -13,5 +13,7 @@ Description: The TimeDuration module provides a Pure Python interface to the cre
         I'd also like to be able to say something like "3 weeks, 5 days 12 hours and 32 minutes" and be
         able to convert that to minutes, seconds or hours and be able to convert strings that look like
         durations of time to a normalized format.
+        
+        2014-03-16: added support for datetime.timedelta 
         
 Platform: UNKNOWN
